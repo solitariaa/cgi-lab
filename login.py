@@ -27,7 +27,6 @@ if username == secret.username and password == secret.password:
 user_id = None
 pass_word = None
 if 'HTTP_COOKIE' in os.environ:
-    print(f"<p>HTTP_COOKIE={os.environ['HTTP_COOKIE']}</p>")    
     cookie_string=os.environ.get('HTTP_COOKIE')
     if cookie_string:
         c = cookie_string.split('; ')
