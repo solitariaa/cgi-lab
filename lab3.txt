@@ -1,0 +1,8 @@
+Q1: Use os.environ
+Q2: QUERY_STRING
+Q3: HTTP_USER_AGENT
+Q4: It use POST method to send data through standard input and use ACTION to specifies the CGI program that will process the form information, then it use FieldStorage instance to keep the information just like "dict".
+Q5: Set-Cookie: <cookie-name>=<cookie-value>
+Q6: HTTP_COOKIE
+Q7: cookie can be used to remember some information at localstorage, this is helpful to avoid users to authenticate repeatedly.
+Q8: https://github.com/solitariaa/cgi-lab.git 
