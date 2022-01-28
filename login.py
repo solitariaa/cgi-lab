@@ -6,43 +6,36 @@ import secret
 import os
 from http.cookies import SimpleCookie
 
-#create instance of FieldStorage
-form = cgi.FieldStorage()
+s = cgi.FieldStorage()
+username = s.getfirst("username")
+password = s.getfirst("password")
 
-#Get data from fields
-username = form.getfirst('username')
-password = form.getfirst('password')
-print("Content-type:text/html\r\n\r\n")
+form_ok = username == secret.username and password == secret.password
+
+cookie = SimpleCookie(os.environ["HTTP_COOKIE"])
+cookie_username = None
+cookie_password = None
+if cookie.get("username"):
+    cookie_username = cookie.get("username").value
+if cookie.get("password"):
+    cookie_password = cookie.get("password").value
+
+cookie_ok = cookie_username == secret.username and cookie_password == secret.password
+
+if cookie_ok:
+    username = cookie_username
+    password = cookie_password
+
+print("Content-Type: text/html")
+if form_ok:
+    print(f"Set-Cookie: username = {username}")
+    print(f"Set-Cookie: password = {password}")
 print()
 
-Username = None
-Password = None
-if username == secret.username and password == secret.password:
-    C = SimpleCookie()
-    C['Username'] = username
-    C['Password'] = password
-    Username = C['Username'].value
-    Password = C['Password'].value
 
-user_id = None
-pass_word = None
-if 'HTTP_COOKIE' in os.environ:
-    print(f"<p>HTTP_COOKIE={os.environ['HTTP_COOKIE']}</p>")    
-    cookie_string=os.environ.get('HTTP_COOKIE')
-    if cookie_string:
-        c = cookie_string.split('; ')
-        for i in c:
-            (key, value) = i.split('=')
-            if key == "Username":
-                user_id = value
-            if key == "Password":
-                pass_word = value
-
-if user_id==secret.username and pass_word==secret.password:
+if username==secret.username and password==secret.password:
     print(secret_page(username,password))
 elif not username and not password:
     print(login_page())
-elif username == Username and password == Password:
-    print(secret_page(secret.username,secret.password))
 else:
     print(after_login_incorrect())
